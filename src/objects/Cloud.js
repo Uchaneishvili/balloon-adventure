@@ -4,15 +4,17 @@ import { Container, Graphics } from 'pixi.js';
 export class Cloud extends Container {
     constructor() {
         super();
-        this.setup();
-    }
+        const cloud = new Graphics();
 
-    setup() {
-        const cloud = new Graphics(); //TODO: Cloud shape should be changed
-        cloud.ellipse(0, 0, 60, 40);
-        cloud.ellipse(40, -10, 70, 50);
-        cloud.ellipse(-40, -10, 70, 50);
-        cloud.fill({ color: 0xFFFFFF, alpha: 0.8 });
+        cloud.circle(0, 0, 40);      // Center
+        cloud.circle(-35, 5, 35);    // Inner Left
+        cloud.circle(35, 5, 35);     // Inner Right
+        cloud.circle(-65, 10, 25);   // Outer Left
+        cloud.circle(65, 10, 25);    // Outer Right
+        cloud.circle(-20, -25, 25);  // Top Left
+        cloud.circle(20, -25, 25);   // Top Right
+
+        cloud.fill({ color: 0xFFFFFF, alpha: 1 });
 
         this.addChild(cloud);
     }
