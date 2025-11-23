@@ -1,6 +1,7 @@
 import { Container } from 'pixi.js';
 import { Balloon } from './objects/Balloon.js';
 import { Cloud } from './objects/Cloud.js';
+import { UI } from './UI.js';
 
 export class Game {
     constructor(app) {
@@ -10,6 +11,9 @@ export class Game {
 
         this.clouds = [];
         this.balloon = null;
+
+        this.ui = new UI(this);
+        this.app.stage.addChild(this.ui);
 
         this.isPlaying = false;
         this.score = 0;
@@ -54,6 +58,7 @@ export class Game {
         this.isGameOver = true;
         this.isPlaying = false;
         this.balloon.visible = false;
+        this.ui.showGameOver(true);
         console.log('pop *****', this.score);
     }
 
@@ -66,6 +71,7 @@ export class Game {
 
     update(ticker) {
         if (!this.isPlaying) return;
+        this.ui.update();
 
         const delta = ticker.deltaTime;
 
@@ -89,10 +95,7 @@ export class Game {
 
         //TODO: Remove max height limit. now it's 6000m (1000m safe zone).
         if (this.altitude > 1000) {
-            console.log('altitude *****', this.altitude);
             this.riskLevel = Math.min((this.altitude - 1000) / 5000, 1);
-            console.log('riskLevel *****', this.riskLevel);
-            console.log('popChance *****', this.popChance);
             if (Math.random() < this.popChance * this.riskLevel * delta) {
                 this.popBalloon();
             }
