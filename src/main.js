@@ -1,4 +1,6 @@
 import { Application } from 'pixi.js';
+import { Game } from './Game.js';
+
 
 (async () => {
     const app = new Application();
@@ -10,6 +12,8 @@ import { Application } from 'pixi.js';
     });
 
     document.body.appendChild(app.canvas);
+
+    new Game(app);
 
     console.log('PixiJS Application initialized');
 })();
