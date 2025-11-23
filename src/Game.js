@@ -11,12 +11,24 @@ export class Game {
         this.clouds = [];
         this.balloon = null;
 
+        this.isPlaying = false;
+        this.score = 0;
+        this.altitude = 0;
+        this.speed = 5;
+        this.isGameOver = false;
+
+        this.riskLevel = 0;
+        this.popChance = 0.001;
+
         this.init();
     }
 
     init() {
         this.createBackground();
         this.createBalloon();
+
+        this.app.ticker.add((ticker) => this.update(ticker));
+        this.isPlaying = true;
     }
 
     createBackground() {
@@ -31,11 +43,61 @@ export class Game {
         cloud.y = randomY ? Math.random() * this.app.screen.height : -100;
         const scale = 0.5 + Math.random() * 0.5;
         cloud.scale.set(scale);
+        cloud.speed = (1 + Math.random()) * 0.5;
 
         this.container.addChildAt(cloud, 0);
         this.clouds.push(cloud);
     }
 
+
+    popBalloon() {
+        this.isGameOver = true;
+        this.isPlaying = false;
+        this.balloon.visible = false;
+        console.log('pop *****', this.score);
+    }
+
+    landBalloon() {
+        if (this.isGameOver) return;
+        this.isPlaying = false;
+        this.isGameOver = true;
+        console.log('land *****', this.score);
+    }
+
+    update(ticker) {
+        if (!this.isPlaying) return;
+
+        const delta = ticker.deltaTime;
+
+        this.altitude += this.speed * delta;
+        this.score = Math.floor(this.altitude / 10);
+
+        this.balloon.rotation = Math.sin(Date.now() / 500) * 0.05;
+
+        this.clouds.forEach((cloud, index) => {
+            cloud.y += (this.speed * cloud.speed) * delta;
+
+            if (cloud.y > this.app.screen.height + 100) {
+                this.container.removeChild(cloud);
+                this.clouds.splice(index, 1);
+                this.spawnCloud();
+            }
+        });
+
+        this.speed += 0.001 * delta;
+
+
+        //TODO: Remove max height limit. now it's 6000m (1000m safe zone).
+        if (this.altitude > 1000) {
+            console.log('altitude *****', this.altitude);
+            this.riskLevel = Math.min((this.altitude - 1000) / 5000, 1);
+            console.log('riskLevel *****', this.riskLevel);
+            console.log('popChance *****', this.popChance);
+            if (Math.random() < this.popChance * this.riskLevel * delta) {
+                this.popBalloon();
+            }
+        }
+    }
     createBalloon() {
         this.balloon = new Balloon();
         this.balloon.x = this.app.screen.width / 2;
