@@ -2,6 +2,7 @@ import { Container } from 'pixi.js';
 import { Balloon } from './objects/Balloon.js';
 import { Cloud } from './objects/Cloud.js';
 import { UI } from './UI.js';
+import { EffectManager } from './utils/EffectManager.js';
 
 export class Game {
     constructor(app) {
@@ -25,6 +26,9 @@ export class Game {
         this.popChance = 0.001;
 
         this.init();
+
+        this.effectManager = new EffectManager();
+        this.app.stage.addChild(this.effectManager)
     }
 
     init() {
@@ -73,11 +77,14 @@ export class Game {
 
 
     popBalloon() {
+        this.effectManager.burst(this.balloon.x, this.balloon.y, 0xFF0000);
+
         this.isGameOver = true;
         this.isPlaying = false;
         this.balloon.visible = false;
         this.ui.showGameOver(true);
         console.log('pop *****', this.score);
+
     }
 
     landBalloon() {
@@ -88,6 +95,8 @@ export class Game {
     }
 
     update(ticker) {
+        console.log('8888', ticker)
+        this.effectManager.update();
         if (!this.isPlaying) return;
         this.ui.update();
 
