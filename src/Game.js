@@ -131,7 +131,7 @@ export class Game {
     createBalloon() {
         this.balloon = new Balloon();
         this.balloon.x = this.app.screen.width / 2;
-        this.balloon.y = this.app.screen.height - 150;
+        this.balloon.y = this.app.screen.height - 300;
         this.container.addChild(this.balloon);
     }
 }
