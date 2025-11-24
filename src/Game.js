@@ -35,6 +35,24 @@ export class Game {
         this.isPlaying = true;
     }
 
+    restart() {
+        this.isPlaying = false;
+        this.isGameOver = false;
+        this.score = 0;
+        this.altitude = 0;
+        this.speed = 5;
+        this.riskLevel = 0;
+
+        this.container.removeChildren();
+        this.clouds = [];
+        this.balloon = null;
+
+        this.createBackground();
+        this.createBalloon();
+
+        this.isPlaying = true;
+    }
+
     createBackground() {
         for (let i = 0; i < 5; i++) {
             this.spawnCloud(true);

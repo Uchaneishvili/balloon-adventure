@@ -141,7 +141,7 @@ export class UI extends Container {
         rButton.cursor = 'pointer';
 
         rButton.on('pointerdown', () => {
-            this.game.init();
+            this.game.restart();
             this.messageContainer.visible = false;
             this.landButton.visible = true;
         });
