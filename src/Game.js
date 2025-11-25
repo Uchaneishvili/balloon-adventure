@@ -3,6 +3,7 @@ import { Balloon } from './objects/Balloon.js';
 import { Cloud } from './objects/Cloud.js';
 import { UI } from './UI.js';
 import { EffectManager } from './utils/EffectManager.js';
+import { SoundManager } from './utils/SoundManager.js';
 
 export class Game {
     constructor(app) {
@@ -29,12 +30,15 @@ export class Game {
 
         this.effectManager = new EffectManager();
         this.app.stage.addChild(this.effectManager)
+
+        this.sound = new SoundManager();
+        this.sound.init();
     }
 
     init() {
         this.createBackground();
         this.createBalloon();
-
+        // this.sound.startWind();
         this.app.ticker.add((ticker) => this.update(ticker));
         this.isPlaying = true;
     }
@@ -79,10 +83,15 @@ export class Game {
     popBalloon() {
         this.effectManager.burst(this.balloon.x, this.balloon.y, 0xFF0000);
 
+        this.sound.playPop();
+        this.sound.stopWind();
+
         this.isGameOver = true;
         this.isPlaying = false;
         this.balloon.visible = false;
         this.ui.showGameOver(false);
+
+
 
     }
 
@@ -90,6 +99,10 @@ export class Game {
         if (this.isGameOver) return;
         this.isPlaying = false;
         this.isGameOver = true;
+
+        this.sound.playWin();
+        this.sound.stopWind();
+
     }
 
     update(ticker) {
@@ -97,12 +110,16 @@ export class Game {
         if (!this.isPlaying) return;
         this.ui.update();
 
+
+
         const delta = ticker.deltaTime;
 
         this.altitude += this.speed * delta;
         this.score = Math.floor(this.altitude / 10);
 
         this.balloon.rotation = Math.sin(Date.now() / 500) * 0.05;
+
+        // this.sound.updateWind(this.speed);
 
         this.clouds.forEach((cloud, index) => {
             cloud.y += (this.speed * cloud.speed) * delta;
