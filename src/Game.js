@@ -98,9 +98,16 @@ export class Game {
   }
 
   createBackground() {
-    for (let i = 0; i < 5; i++) {
+
+    const density = this.getCloudDensity();
+    for (let i = 0; i < density; i++) {
       this.spawnCloud(true);
     }
+  }
+
+  getCloudDensity() {
+    const density = Math.min(5 + Math.floor(this.altitude / 1000), 20);
+    return density;
   }
 
   spawnCloud(randomY = false) {
@@ -169,9 +176,15 @@ export class Game {
       if (cloud.y > this.app.screen.height + 100) {
         this.container.removeChild(cloud);
         this.clouds.splice(index, 1);
-        this.spawnCloud();
       }
     });
+
+    const targetDensity = this.getCloudDensity();
+    if (this.clouds.length < targetDensity) {
+      if (Math.random() < 0.1 * delta) {
+        this.spawnCloud();
+      }
+    }
 
     this.speed += 0.005 * delta;
 
