@@ -7,7 +7,7 @@ export class SoundManager {
         };
 
         this.sounds.wind.loop = true;
-        this.sounds.wind.volume = 0;
+        this.sounds.wind.volume = 0
 
         this.masterVolume = 0.3;
     }
@@ -25,9 +25,13 @@ export class SoundManager {
     }
 
     startWind() {
-        this.sounds.wind.play().catch(e => console.log("Audio play failed (user interaction needed):", e));
+        this.sounds.wind.volume = 0.5
+        this.sounds.wind.play()
     }
 
+    updateWind(speed) {
+        //TODO: implement changing wind volume based on speed
+    }
 
     stopWind() {
         this.sounds.wind.pause();
@@ -39,7 +43,7 @@ export class SoundManager {
         if (sound) {
             sound.volume = this.masterVolume;
             sound.currentTime = 0;
-            sound.play().catch(e => console.log("Audio play failed:", e));
+            sound.play()
         }
     }
 }

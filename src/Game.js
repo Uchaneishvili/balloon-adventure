@@ -38,7 +38,15 @@ export class Game {
     init() {
         this.createBackground();
         this.createBalloon();
-        // this.sound.startWind();
+
+        const startAudio = () => {
+            this.sound.startWind();
+            window.removeEventListener('click', startAudio);
+            window.removeEventListener('touchstart', startAudio);
+        };
+        window.addEventListener('click', startAudio);
+        window.addEventListener('touchstart', startAudio);
+
         this.app.ticker.add((ticker) => this.update(ticker));
         this.isPlaying = true;
     }
@@ -90,9 +98,6 @@ export class Game {
         this.isPlaying = false;
         this.balloon.visible = false;
         this.ui.showGameOver(false);
-
-
-
     }
 
     landBalloon() {
@@ -119,7 +124,7 @@ export class Game {
 
         this.balloon.rotation = Math.sin(Date.now() / 500) * 0.05;
 
-        // this.sound.updateWind(this.speed);
+        this.sound.updateWind(this.speed); // TODO: Update wind sound volume
 
         this.clouds.forEach((cloud, index) => {
             cloud.y += (this.speed * cloud.speed) * delta;
