@@ -27,7 +27,6 @@ export class Game {
         this.app.stage.addChild(this.effectManager)
 
         this.soundManager = new SoundManager();
-        this.soundManager.init();
 
         this.loadAssets();
     }
@@ -36,7 +35,12 @@ export class Game {
         await Assets.load([
             'assets/ui/sound_on.svg',
             'assets/ui/sound_off.svg',
+            'assets/sounds/pop.mp3',
+            'assets/sounds/win.mp3',
+            'assets/sounds/wind.mp3',
         ]);
+
+        this.soundManager.init();
 
         this.ui = new UI(this);
         this.app.stage.addChild(this.ui);

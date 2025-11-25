@@ -135,7 +135,7 @@ export class UI extends Container {
         const rButton = new Container();
         rButton.addChild(rBg, rText);
         rButton.x = window.innerWidth / 2;
-        rButton.y = window.innerHeight / 2 + 100;
+        rButton.y = window.innerHeight / 2 + 150;
 
         rButton.eventMode = 'static';
         rButton.cursor = 'pointer';

@@ -1,36 +1,38 @@
+import { sound } from '@pixi/sound';
+import { Assets } from 'pixi.js';
+
 export class SoundManager {
     constructor() {
-        this.sounds = {
-            pop: new Audio('assets/sounds/pop.mp3'),
-            win: new Audio('assets/sounds/win.mp3'),
-            wind: new Audio('assets/sounds/wind.mp3')
-        };
-
-        this.sounds.wind.loop = true;
-        this.sounds.wind.volume = 0
-
+        this.sounds = {};
         this.masterVolume = 0.3;
         this.isMuted = false;
+        this.lastWindSpeed = 0;
+    }
+
+    init() {
+        this.sounds = {
+            pop: Assets.get('assets/sounds/pop.mp3'),
+            win: Assets.get('assets/sounds/win.mp3'),
+            wind: Assets.get('assets/sounds/wind.mp3')
+        };
+
+        if (this.sounds.wind) {
+            this.sounds.wind.loop = true;
+            this.sounds.wind.volume = 0;
+        }
     }
 
     toggleMute() {
         this.isMuted = !this.isMuted;
         if (this.isMuted) {
-            Object.values(this.sounds).forEach(sound => sound.volume = 0);
+            sound.muteAll();
         } else {
-            this.sounds.pop.volume = this.masterVolume;
-            this.sounds.win.volume = this.masterVolume;
-
-            const currentWindVol = this.sounds.wind.volume;
-            if (currentWindVol > 0) {
-                this.updateWind(this.lastWindSpeed || 0);
+            sound.unmuteAll();
+            if (this.sounds.wind && this.sounds.wind.isPlaying) {
+                this.updateWind(this.lastWindSpeed);
             }
         }
         return this.isMuted;
-    }
-
-    init() {
-        Object.values(this.sounds).forEach(sound => sound.load());
     }
 
     playPop() {
@@ -42,26 +44,26 @@ export class SoundManager {
     }
 
     startWind() {
-        this.sounds.wind.play()
+        this.sounds.wind.play();
     }
 
     updateWind(speed) {
         this.lastWindSpeed = speed;
-        const targetVol = this.isMuted ? 0 : Math.min(speed / 5, 0.2) * 0.2 * this.masterVolume;
+        if (!this.sounds.wind) return;
+
+        const targetVol = Math.min(speed / 5, 0.2) * 0.2 * this.masterVolume;
         this.sounds.wind.volume = targetVol;
     }
 
     stopWind() {
-        this.sounds.wind.pause();
-        this.sounds.wind.currentTime = 0;
+        this.sounds.wind.stop();
     }
 
     playSound(name) {
-        const sound = this.sounds[name];
-        if (sound) {
-            sound.volume = this.isMuted ? 0 : this.masterVolume;
-            sound.currentTime = 0;
-            sound.play()
+        const s = this.sounds[name];
+        if (s) {
+            s.volume = this.masterVolume;
+            s.play();
         }
     }
 }
