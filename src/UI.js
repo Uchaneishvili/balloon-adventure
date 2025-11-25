@@ -22,6 +22,16 @@ export class UI extends Container {
         this.scoreText.y = 20;
         this.addChild(this.scoreText);
 
+        this.velocityText = new Text({ text: 'Velocity: 0 m/s', style });
+        this.velocityText.x = 20;
+        this.velocityText.y = 60;
+        this.addChild(this.velocityText);
+
+        this.riskText = new Text({ text: 'Risk: 0%', style });
+        this.riskText.x = 20;
+        this.riskText.y = 100;
+        this.addChild(this.riskText);
+
         this.createLandButton();
         this.createMuteButton();
 
@@ -67,6 +77,8 @@ export class UI extends Container {
 
     update() {
         this.scoreText.text = `Altitude: ${Math.floor(this.game.altitude)}m`;
+        this.velocityText.text = `Velocity: ${this.game.speed.toFixed(1)} m/s`;
+        this.riskText.text = `Risk: ${(this.game.riskLevel * 100).toFixed(0)}%`;
 
         if (this.game.isGameOver && !this.messageContainer.visible) {
             if (!this.game.balloon.visible) {
@@ -112,9 +124,11 @@ export class UI extends Container {
             text: `Score: ${this.game.score}`,
             style: scoreStyle
         });
+
         score.anchor.set(0.5);
         score.x = window.innerWidth / 2;
         score.y = window.innerHeight / 2 + 50;
+
 
         const rBg = new Graphics();
         rBg.roundRect(-100, -30, 200, 60, 10);

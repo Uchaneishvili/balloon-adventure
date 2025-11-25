@@ -17,7 +17,7 @@ export class Game {
         this.isPlaying = false;
         this.score = 0;
         this.altitude = 0;
-        this.speed = 5;
+        this.speed = 2;
         this.isGameOver = false;
 
         this.riskLevel = 0;
@@ -69,7 +69,7 @@ export class Game {
         this.isGameOver = false;
         this.score = 0;
         this.altitude = 0;
-        this.speed = 5;
+        this.speed = 2;
         this.riskLevel = 0;
 
         this.container.removeChildren();
