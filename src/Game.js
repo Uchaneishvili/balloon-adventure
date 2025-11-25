@@ -1,4 +1,4 @@
-import { Container } from 'pixi.js';
+import { Container, Assets } from 'pixi.js';
 import { Balloon } from './objects/Balloon.js';
 import { Cloud } from './objects/Cloud.js';
 import { UI } from './UI.js';
@@ -14,9 +14,6 @@ export class Game {
         this.clouds = [];
         this.balloon = null;
 
-        this.ui = new UI(this);
-        this.app.stage.addChild(this.ui);
-
         this.isPlaying = false;
         this.score = 0;
         this.altitude = 0;
@@ -26,13 +23,25 @@ export class Game {
         this.riskLevel = 0;
         this.popChance = 0.001;
 
-        this.init();
-
         this.effectManager = new EffectManager();
         this.app.stage.addChild(this.effectManager)
 
-        this.sound = new SoundManager();
-        this.sound.init();
+        this.soundManager = new SoundManager();
+        this.soundManager.init();
+
+        this.loadAssets();
+    }
+
+    async loadAssets() {
+        await Assets.load([
+            'assets/ui/sound_on.svg',
+            'assets/ui/sound_off.svg',
+        ]);
+
+        this.ui = new UI(this);
+        this.app.stage.addChild(this.ui);
+
+        this.init();
     }
 
     init() {
@@ -40,7 +49,7 @@ export class Game {
         this.createBalloon();
 
         const startAudio = () => {
-            this.sound.startWind();
+            this.soundManager.startWind();
             window.removeEventListener('click', startAudio);
             window.removeEventListener('touchstart', startAudio);
         };
@@ -67,7 +76,7 @@ export class Game {
         this.createBalloon();
 
         this.isPlaying = true;
-        this.sound.startWind();
+        this.soundManager.startWind();
     }
 
     createBackground() {
@@ -92,8 +101,8 @@ export class Game {
     popBalloon() {
         this.effectManager.burst(this.balloon.x, this.balloon.y, 0xFF0000);
 
-        this.sound.playPop();
-        this.sound.stopWind();
+        this.soundManager.playPop();
+        this.soundManager.stopWind();
 
         this.isGameOver = true;
         this.isPlaying = false;
@@ -106,8 +115,8 @@ export class Game {
         this.isPlaying = false;
         this.isGameOver = true;
 
-        this.sound.playWin();
-        this.sound.stopWind();
+        this.soundManager.playWin();
+        this.soundManager.stopWind();
 
     }
 
@@ -125,7 +134,7 @@ export class Game {
 
         this.balloon.rotation = Math.sin(Date.now() / 500) * 0.05;
 
-        this.sound.updateWind(this.speed);
+        this.soundManager.updateWind(this.speed);
         this.clouds.forEach((cloud, index) => {
             cloud.y += (this.speed * cloud.speed) * delta;
 

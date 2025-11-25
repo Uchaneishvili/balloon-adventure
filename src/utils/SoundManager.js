@@ -10,6 +10,23 @@ export class SoundManager {
         this.sounds.wind.volume = 0
 
         this.masterVolume = 0.3;
+        this.isMuted = false;
+    }
+
+    toggleMute() {
+        this.isMuted = !this.isMuted;
+        if (this.isMuted) {
+            Object.values(this.sounds).forEach(sound => sound.volume = 0);
+        } else {
+            this.sounds.pop.volume = this.masterVolume;
+            this.sounds.win.volume = this.masterVolume;
+
+            const currentWindVol = this.sounds.wind.volume;
+            if (currentWindVol > 0) {
+                this.updateWind(this.lastWindSpeed || 0);
+            }
+        }
+        return this.isMuted;
     }
 
     init() {
@@ -29,8 +46,8 @@ export class SoundManager {
     }
 
     updateWind(speed) {
-        console.log('speed', speed)
-        const targetVol = Math.min(speed / 5, 0.2) * 0.2 * this.masterVolume;
+        this.lastWindSpeed = speed;
+        const targetVol = this.isMuted ? 0 : Math.min(speed / 5, 0.2) * 0.2 * this.masterVolume;
         this.sounds.wind.volume = targetVol;
     }
 
@@ -42,7 +59,7 @@ export class SoundManager {
     playSound(name) {
         const sound = this.sounds[name];
         if (sound) {
-            sound.volume = this.masterVolume;
+            sound.volume = this.isMuted ? 0 : this.masterVolume;
             sound.currentTime = 0;
             sound.play()
         }

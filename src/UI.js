@@ -1,4 +1,4 @@
-import { Container, Text, Graphics, TextStyle } from 'pixi.js';
+import { Container, Text, Graphics, TextStyle, Sprite } from 'pixi.js';
 
 export class UI extends Container {
     constructor(game) {
@@ -23,6 +23,7 @@ export class UI extends Container {
         this.addChild(this.scoreText);
 
         this.createLandButton();
+        this.createMuteButton();
 
         this.messageContainer = new Container();
         this.messageContainer.visible = false;
@@ -146,5 +147,39 @@ export class UI extends Container {
         });
 
         this.messageContainer.addChild(title, score, rButton);
+    }
+
+    createMuteButton() {
+        this.muteButton = new Container();
+
+        this.soundOn = Sprite.from('assets/ui/sound_on.svg'); //TODO: Change design for the sound_on. Find better SVG
+        this.soundOff = Sprite.from('assets/ui/sound_off.svg'); //TODO: Change design for the sound_off. Find better SVG
+
+        this.soundOn.width = 50;
+        this.soundOn.height = 50;
+        this.soundOff.width = 50;
+        this.soundOff.height = 50;
+
+        this.soundOn.anchor.set(0.5);
+        this.soundOff.anchor.set(0.5);
+
+        this.soundOff.visible = false;
+        this.soundOn.visible = true;
+
+        this.muteButton.addChild(this.soundOn, this.soundOff);
+
+        this.muteButton.x = window.innerWidth - 50;
+        this.muteButton.y = 40;
+
+        this.muteButton.eventMode = 'static';
+        this.muteButton.cursor = 'pointer';
+
+        this.muteButton.on('pointerdown', () => {
+            const isMuted = this.game.soundManager.toggleMute();
+            this.soundOn.visible = !isMuted;
+            this.soundOff.visible = isMuted;
+        });
+
+        this.addChild(this.muteButton);
     }
 }
