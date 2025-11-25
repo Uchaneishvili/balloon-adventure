@@ -58,7 +58,6 @@ export class UI extends Container {
         this.landButton.cursor = 'pointer';
 
         this.landButton.on('pointerdown', () => {
-            console.log('land *****', this.game.altitude);
             this.game.landBalloon();
             this.showGameOver(true);
         });

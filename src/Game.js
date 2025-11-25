@@ -82,8 +82,7 @@ export class Game {
         this.isGameOver = true;
         this.isPlaying = false;
         this.balloon.visible = false;
-        this.ui.showGameOver(true);
-        console.log('pop *****', this.score);
+        this.ui.showGameOver(false);
 
     }
 
@@ -91,11 +90,9 @@ export class Game {
         if (this.isGameOver) return;
         this.isPlaying = false;
         this.isGameOver = true;
-        console.log('land *****', this.score);
     }
 
     update(ticker) {
-        console.log('8888', ticker)
         this.effectManager.update();
         if (!this.isPlaying) return;
         this.ui.update();

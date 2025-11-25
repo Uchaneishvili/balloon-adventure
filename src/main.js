@@ -15,5 +15,4 @@ import { Game } from './Game.js';
 
     new Game(app);
 
-    console.log('PixiJS Application initialized');
 })();
