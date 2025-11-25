@@ -28,7 +28,22 @@ export class Game {
 
     this.soundManager = new SoundManager();
 
+    window.addEventListener('resize', () => this.resize());
+
     this.loadAssets();
+  }
+
+  resize() {
+    const { width, height } = this.app.screen;
+
+    if (this.ui) {
+      this.ui.resize(width, height);
+    }
+
+    if (this.balloon) {
+      this.balloon.x = width / 2;
+      this.balloon.y = height - 300;
+    }
   }
 
   async loadAssets() {

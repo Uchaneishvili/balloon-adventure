@@ -44,6 +44,80 @@ export class UI extends Container {
     this.addChild(this.messageContainer);
 
     this.createStartMenu();
+
+    this.resize(this.game.app.screen.width, this.game.app.screen.height);
+  }
+
+  resize(width, height) {
+    if (this.landButton) {
+      this.landButton.x = width / 2 - 100;
+      this.landButton.y = height - 100;
+    }
+
+    if (this.startMenuContainer) {
+      if (this.startMenuBg) {
+        this.startMenuBg.clear();
+        this.startMenuBg.rect(0, 0, width, height);
+        this.startMenuBg.fill({ color: 0x000000, alpha: 0.7 });
+      }
+
+      if (this.startTitle) {
+        this.startTitle.x = width / 2;
+        this.startTitle.y = height / 2 - 100;
+
+        const maxTitleWidth = width * 0.9;
+        this.startTitle.scale.set(1);
+        if (this.startTitle.width > maxTitleWidth) {
+          const scale = maxTitleWidth / this.startTitle.width;
+          this.startTitle.scale.set(scale);
+        }
+      }
+
+      const buttonsY = height / 2 + 50;
+      if (this.infoButton) {
+        this.infoButton.x = width / 2 - 150;
+        this.infoButton.y = buttonsY;
+      }
+      if (this.playButton) {
+        this.playButton.x = width / 2;
+        this.playButton.y = buttonsY;
+      }
+    }
+
+    if (this.messageContainer) {
+      if (this.messageBg) {
+        this.messageBg.clear();
+        this.messageBg.rect(0, 0, width, height);
+        this.messageBg.fill({ color: 0x000000, alpha: 0.7 });
+      }
+      if (this.messageTitle) {
+        this.messageTitle.x = width / 2;
+        this.messageTitle.y = height / 2 - 50;
+
+        const maxTitleWidth = width * 0.9;
+        this.messageTitle.scale.set(1);
+        if (this.messageTitle.width > maxTitleWidth) {
+          const scale = maxTitleWidth / this.messageTitle.width;
+          this.messageTitle.scale.set(scale);
+        }
+      }
+      if (this.messageScore) {
+        this.messageScore.x = width / 2;
+        this.messageScore.y = height / 2 + 50;
+      }
+      if (this.replayButton) {
+        this.replayButton.x = width / 2;
+        this.replayButton.y = height / 2 + 150;
+      }
+    }
+
+    if (this.startMenuContainer && this.startMenuContainer.visible) {
+      this.muteButton.x = width / 2 + 150;
+      this.muteButton.y = height / 2 + 50;
+    } else {
+      this.muteButton.x = width - 50;
+      this.muteButton.y = 40;
+    }
   }
 
   createLandButton() {
@@ -68,15 +142,11 @@ export class UI extends Container {
 
     this.landButton.addChild(bg, text);
 
-    this.landButton.x = window.innerWidth / 2 - 100;
-    this.landButton.y = window.innerHeight - 100;
-
     this.landButton.eventMode = 'static';
     this.landButton.cursor = 'pointer';
 
     this.landButton.on('pointerdown', () => {
       this.game.landBalloon();
-      this.showGameOver(true);
     });
     this.hudContainer.addChild(this.landButton);
   }
@@ -116,10 +186,8 @@ export class UI extends Container {
     this.startMenuContainer = new Container();
     this.addChild(this.startMenuContainer);
 
-    const bg = new Graphics();
-    bg.rect(0, 0, window.innerWidth, window.innerHeight);
-    bg.fill({ color: 0x000000, alpha: 0.7 });
-    this.startMenuContainer.addChild(bg);
+    this.startMenuBg = new Graphics();
+    this.startMenuContainer.addChild(this.startMenuBg);
 
     const titleStyle = new TextStyle({
       fontFamily: 'Arial',
@@ -135,20 +203,19 @@ export class UI extends Container {
       dropShadowDistance: 6,
     });
 
-    const title = new Text({ text: 'BALLOON ADVENTURE', style: titleStyle });
-    title.anchor.set(0.5);
-    title.x = window.innerWidth / 2;
-    title.y = window.innerHeight / 2 - 100;
-    this.startMenuContainer.addChild(title);
-
-    const buttonsY = window.innerHeight / 2 + 50;
+    this.startTitle = new Text({
+      text: 'BALLOON ADVENTURE',
+      style: titleStyle,
+    });
+    this.startTitle.anchor.set(0.5);
+    this.startMenuContainer.addChild(this.startTitle);
 
     this.infoButton = new Container();
     const infoBg = new Graphics();
     infoBg.circle(0, 0, 30);
     infoBg.fill(0x2196f3);
     const infoText = new Text({
-      text: 'i', //TODO: We need some icon for this button.
+      text: 'i',
       style: {
         fontFamily: 'Arial',
         fontSize: 36,
@@ -164,8 +231,6 @@ export class UI extends Container {
       console.log('Info clicked');
     });
 
-    this.infoButton.x = window.innerWidth / 2 - 150;
-    this.infoButton.y = buttonsY;
     this.startMenuContainer.addChild(this.infoButton);
 
     this.playButton = new Container();
@@ -190,8 +255,6 @@ export class UI extends Container {
       this.game.startGame();
     });
 
-    this.playButton.x = window.innerWidth / 2;
-    this.playButton.y = buttonsY;
     this.startMenuContainer.addChild(this.playButton);
   }
 
@@ -200,15 +263,19 @@ export class UI extends Container {
     this.hudContainer.visible = false;
 
     this.startMenuContainer.addChild(this.muteButton);
-    this.muteButton.x = window.innerWidth / 2 + 150;
-    this.muteButton.y = window.innerHeight / 2 + 50;
+
+    const { width, height } = this.game.app.screen;
+    this.muteButton.x = width / 2 + 150;
+    this.muteButton.y = height / 2 + 50;
   }
 
   hideStartMenu() {
     this.startMenuContainer.visible = false;
 
     this.addChild(this.muteButton);
-    this.muteButton.x = window.innerWidth - 50;
+
+    const { width } = this.game.app.screen;
+    this.muteButton.x = width - 50;
     this.muteButton.y = 40;
   }
 
@@ -234,10 +301,15 @@ export class UI extends Container {
     this.messageContainer.visible = true;
     this.messageContainer.removeChildren();
 
-    const bg = new Graphics();
-    bg.rect(0, 0, window.innerWidth, window.innerHeight);
-    bg.fill({ color: 0x000000, alpha: 0.7 });
-    this.messageContainer.addChild(bg);
+    this.messageBg = new Graphics();
+    this.messageBg.rect(
+      0,
+      0,
+      this.game.app.screen.width,
+      this.game.app.screen.height,
+    );
+    this.messageBg.fill({ color: 0x000000, alpha: 0.7 });
+    this.messageContainer.addChild(this.messageBg);
 
     const titleStyle = new TextStyle({
       fontFamily: 'Arial',
@@ -248,13 +320,12 @@ export class UI extends Container {
       strokeThickness: 6,
     });
 
-    const title = new Text({
+    this.messageTitle = new Text({
       text: success ? 'SAFE LANDING!' : 'BALLOON POPPED!',
       style: titleStyle,
     });
-    title.anchor.set(0.5);
-    title.x = window.innerWidth / 2;
-    title.y = window.innerHeight / 2 - 50;
+    this.messageTitle.anchor.set(0.5);
+    this.messageContainer.addChild(this.messageTitle);
 
     const scoreStyle = new TextStyle({
       fontFamily: 'Arial',
@@ -262,14 +333,12 @@ export class UI extends Container {
       fill: '#ffffff',
     });
 
-    const score = new Text({
+    this.messageScore = new Text({
       text: `Score: ${this.game.score}`,
       style: scoreStyle,
     });
-
-    score.anchor.set(0.5);
-    score.x = window.innerWidth / 2;
-    score.y = window.innerHeight / 2 + 50;
+    this.messageScore.anchor.set(0.5);
+    this.messageContainer.addChild(this.messageScore);
 
     const rBg = new Graphics();
     rBg.roundRect(-100, -30, 200, 60, 10);
@@ -286,21 +355,21 @@ export class UI extends Container {
     });
     rText.anchor.set(0.5);
 
-    const rButton = new Container();
-    rButton.addChild(rBg, rText);
-    rButton.x = window.innerWidth / 2;
-    rButton.y = window.innerHeight / 2 + 150;
+    this.replayButton = new Container();
+    this.replayButton.addChild(rBg, rText);
 
-    rButton.eventMode = 'static';
-    rButton.cursor = 'pointer';
+    this.replayButton.eventMode = 'static';
+    this.replayButton.cursor = 'pointer';
 
-    rButton.on('pointerdown', () => {
+    this.replayButton.on('pointerdown', () => {
       this.game.restart();
       this.messageContainer.visible = false;
       this.landButton.visible = true;
       this.hudContainer.visible = true;
     });
 
-    this.messageContainer.addChild(title, score, rButton);
+    this.messageContainer.addChild(this.replayButton);
+
+    this.resize(this.game.app.screen.width, this.game.app.screen.height);
   }
 }
