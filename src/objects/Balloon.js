@@ -11,7 +11,7 @@ export class Balloon extends Container {
     balloon.circle(0, 0, 60);
     balloon.fill(0xff5733);
 
-    balloon.ellipse(-10, -10, 8, 15);
+    balloon.ellipse(-25, -10, 8, 20);
     balloon.fill({ color: 0xffffff, alpha: 0.3 });
 
     this.addChild(balloon);
