@@ -1,60 +1,59 @@
 import { Container, Graphics } from 'pixi.js';
 
 export class EffectManager extends Container {
-    constructor() {
-        super();
-        this.effects = [];
+  constructor() {
+    super();
+    this.effects = [];
+  }
+
+  burst(x, y, color = 0xffffff, count, type) {
+    for (let i = 0; i < count; i++) {
+      const p = new Graphics();
+
+      if (type === 'land') {
+        p.rect(0, 0, 6, 10);
+        p.fill(Math.random() * 0xffffff);
+        p.rotation = Math.random() * Math.PI * 2;
+      } else {
+        p.circle(0, 0, 3 + Math.random() * 4);
+        p.fill(color);
+      }
+
+      p.x = x;
+      p.y = y;
+
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 2 + Math.random() * 5;
+
+      this.addChild(p);
+
+      this.effects.push({
+        sprite: p,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        life: 1.0,
+        decay: 0.02 + Math.random() * 0.03,
+      });
     }
+  }
 
-    burst(x, y, color = 0xFFFFFF, count, type) {
+  update() {
+    for (let i = this.effects.length - 1; i >= 0; i--) {
+      const e = this.effects[i];
 
-        for (let i = 0; i < count; i++) {
-            const p = new Graphics();
+      e.sprite.x += e.vx;
+      e.sprite.y += e.vy;
+      e.life -= e.decay;
 
-            if (type === 'land') {
-                p.rect(0, 0, 6, 10);
-                p.fill(Math.random() * 0xFFFFFF);
-                p.rotation = Math.random() * Math.PI * 2;
-            } else {
-                p.circle(0, 0, 3 + Math.random() * 4);
-                p.fill(color);
-            }
+      e.vy += 0.1;
 
-            p.x = x;
-            p.y = y;
+      e.sprite.alpha = e.life;
 
-            const angle = Math.random() * Math.PI * 2;
-            const speed = 2 + Math.random() * 5;
-
-            this.addChild(p);
-
-            this.effects.push({
-                sprite: p,
-                vx: Math.cos(angle) * speed,
-                vy: Math.sin(angle) * speed,
-                life: 1.0,
-                decay: 0.02 + Math.random() * 0.03,
-            });
-        }
+      if (e.life <= 0) {
+        this.removeChild(e.sprite);
+        e.sprite.destroy();
+        this.effects.splice(i, 1);
+      }
     }
-
-    update() {
-        for (let i = this.effects.length - 1; i >= 0; i--) {
-            const e = this.effects[i];
-
-            e.sprite.x += e.vx;
-            e.sprite.y += e.vy;
-            e.life -= e.decay;
-
-            e.vy += 0.1;
-
-            e.sprite.alpha = e.life;
-
-            if (e.life <= 0) {
-                this.removeChild(e.sprite);
-                e.sprite.destroy();
-                this.effects.splice(i, 1);
-            }
-        }
-    }
+  }
 }
