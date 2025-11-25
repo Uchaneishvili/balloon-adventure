@@ -8,7 +8,9 @@ import { Game } from './Game.js';
     await app.init({
         background: '#87CEEB',
         resizeTo: window,
-        antialias: true
+        antialias: true,
+        resolution: window.devicePixelRatio || 1,
+        autoDensity: true
     });
 
     document.body.appendChild(app.canvas);
