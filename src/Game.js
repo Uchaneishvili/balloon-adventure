@@ -103,7 +103,7 @@ export class Game {
 
 
     popBalloon() {
-        this.effectManager.burst(this.balloon.x, this.balloon.y, 0xFF0000);
+        this.effectManager.burst(this.balloon.x, this.balloon.y, 0xFF0000, 100, 'pop');
 
         this.soundManager.playPop();
         this.soundManager.stopWind();
@@ -115,10 +115,12 @@ export class Game {
     }
 
     landBalloon() {
-        if (this.isGameOver) return;
+        this.effectManager.burst(this.balloon.x, this.balloon.y, 0xFF0000, 100, 'land');
+
         this.isPlaying = false;
         this.isGameOver = true;
-
+        this.balloon.visible = false;
+        this.ui.showGameOver(true);
         this.soundManager.playWin();
         this.soundManager.stopWind();
 

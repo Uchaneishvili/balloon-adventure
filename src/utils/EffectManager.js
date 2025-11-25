@@ -6,12 +6,22 @@ export class EffectManager extends Container {
         this.effects = [];
     }
 
-    burst(x, y, color = 0xFFFFFF, count = 20,) {
+    burst(x, y, color = 0xFFFFFF, count, type) {
+
+        console.log('****', type)
         for (let i = 0; i < count; i++) {
             const p = new Graphics();
 
-            p.circle(0, 0, 3 + Math.random() * 4);
-            p.fill(color);
+            console.log('****', type)
+
+            if (type === 'land') {
+                p.rect(0, 0, 6, 10);
+                p.fill(Math.random() * 0xFFFFFF);
+                p.rotation = Math.random() * Math.PI * 2;
+            } else {
+                p.circle(0, 0, 3 + Math.random() * 4);
+                p.fill(color);
+            }
 
             p.x = x;
             p.y = y;
