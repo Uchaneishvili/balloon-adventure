@@ -125,8 +125,7 @@ export class Game {
 
         this.balloon.rotation = Math.sin(Date.now() / 500) * 0.05;
 
-        this.sound.updateWind(this.speed); // TODO: Update wind sound volume
-
+        this.sound.updateWind(this.speed);
         this.clouds.forEach((cloud, index) => {
             cloud.y += (this.speed * cloud.speed) * delta;
 
