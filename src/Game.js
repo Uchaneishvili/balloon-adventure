@@ -17,7 +17,7 @@ export class Game {
     this.isPlaying = false;
     this.score = 0;
     this.altitude = 0;
-    this.speed = 2;
+    this.speed = 4;
     this.isGameOver = false;
 
     this.riskLevel = 0;
@@ -83,7 +83,7 @@ export class Game {
     this.isGameOver = false;
     this.score = 0;
     this.altitude = 0;
-    this.speed = 2;
+    this.speed = 4;
     this.riskLevel = 0;
 
     this.container.removeChildren();
@@ -173,13 +173,22 @@ export class Game {
       }
     });
 
-    this.speed += 0.001 * delta;
+    this.speed += 0.005 * delta;
 
-    if (this.altitude > 1000) {
-      this.riskLevel = Math.min((this.altitude - 1000) / 5000, 1);
+    if (this.altitude > 2000) {
+      this.riskLevel = Math.min((this.altitude - 2000) / 5000, 1);
       if (Math.random() < this.popChance * this.riskLevel * delta) {
         this.popBalloon();
       }
+    }
+
+    if (this.riskLevel >= 0.5) {
+      const shakeAmount = 5;
+      this.container.x = (Math.random() * shakeAmount - shakeAmount / 2);
+      this.container.y = (Math.random() * shakeAmount - shakeAmount / 2);
+    } else {
+      this.container.x = 0;
+      this.container.y = 0;
     }
   }
   createBalloon() {
