@@ -116,7 +116,7 @@ export class Game {
     cloud.y = randomY ? Math.random() * this.app.screen.height : -100;
     const scale = 0.5 + Math.random() * 0.5;
     cloud.scale.set(scale);
-    cloud.speed = (1 + Math.random()) * 0.5;
+    cloud.speed = scale;
 
     this.container.addChildAt(cloud, 0);
     this.clouds.push(cloud);
