@@ -8,11 +8,8 @@ export class EffectManager extends Container {
 
     burst(x, y, color = 0xFFFFFF, count, type) {
 
-        console.log('****', type)
         for (let i = 0; i < count; i++) {
             const p = new Graphics();
-
-            console.log('****', type)
 
             if (type === 'land') {
                 p.rect(0, 0, 6, 10);
