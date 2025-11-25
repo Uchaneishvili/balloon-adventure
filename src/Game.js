@@ -67,6 +67,7 @@ export class Game {
         this.createBalloon();
 
         this.isPlaying = true;
+        this.sound.startWind();
     }
 
     createBackground() {

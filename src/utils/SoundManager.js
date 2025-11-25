@@ -25,12 +25,13 @@ export class SoundManager {
     }
 
     startWind() {
-        this.sounds.wind.volume = 0.5
         this.sounds.wind.play()
     }
 
     updateWind(speed) {
-        //TODO: implement changing wind volume based on speed
+        console.log('speed', speed)
+        const targetVol = Math.min(speed / 5, 0.2) * 0.2 * this.masterVolume;
+        this.sounds.wind.volume = targetVol;
     }
 
     stopWind() {
