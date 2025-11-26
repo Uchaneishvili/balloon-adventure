@@ -38,7 +38,7 @@ export class Cloud extends Container {
         break;
     }
 
-    cloud.fill({ color: 0xffffff, alpha: 1 });
+    cloud.fill({ color: 0xffffff, alpha: 0.5 });
     this.addChild(cloud);
   }
 }
