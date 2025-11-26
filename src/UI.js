@@ -120,6 +120,17 @@ export class UI extends Container {
       this.muteButton.y = 40;
     }
 
+    if (this.rulesContainer && this.rulesContainer.visible) {
+      if (this.rulesBg) {
+        this.rulesBg.clear();
+        this.rulesBg.rect(0, 0, width, height);
+        this.rulesBg.fill({ color: 0x000000, alpha: 0.8 });
+      }
+      if (this.rulesPanel) {
+        this.rulesPanel.x = width / 2;
+        this.rulesPanel.y = height / 2;
+      }
+    }
   }
 
   createLandButton() {
