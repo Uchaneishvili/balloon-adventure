@@ -44,6 +44,7 @@ export class UI extends Container {
     this.addChild(this.messageContainer);
 
     this.createStartMenu();
+    this.createRulesModal();
 
     this.resize(this.game.app.screen.width, this.game.app.screen.height);
   }
@@ -118,6 +119,7 @@ export class UI extends Container {
       this.muteButton.x = width - 50;
       this.muteButton.y = 40;
     }
+
   }
 
   createLandButton() {
@@ -228,7 +230,7 @@ export class UI extends Container {
     this.infoButton.eventMode = 'static';
     this.infoButton.cursor = 'pointer';
     this.infoButton.on('pointerdown', () => {
-      console.log('Info clicked');
+      this.showRulesModal();
     });
 
     this.startMenuContainer.addChild(this.infoButton);
@@ -370,6 +372,91 @@ export class UI extends Container {
 
     this.messageContainer.addChild(this.replayButton);
 
+    this.resize(this.game.app.screen.width, this.game.app.screen.height);
+  }
+  createRulesModal() {
+    this.rulesContainer = new Container();
+    this.rulesContainer.visible = false;
+    this.addChild(this.rulesContainer);
+
+    this.rulesBg = new Graphics();
+    this.rulesContainer.addChild(this.rulesBg);
+
+    this.rulesPanel = new Container();
+    this.rulesContainer.addChild(this.rulesPanel);
+
+    const panelBg = new Graphics();
+    panelBg.roundRect(-250, -200, 500, 400, 20);
+    panelBg.fill(0xffffff);
+    this.rulesPanel.addChild(panelBg);
+
+    const titleStyle = new TextStyle({
+      fontFamily: 'Arial',
+      fontSize: 36,
+      fontWeight: 'bold',
+      fill: '#333333',
+    });
+
+    const title = new Text({ text: 'HOW TO PLAY', style: titleStyle });
+    title.anchor.set(0.5);
+    title.y = -150;
+    this.rulesPanel.addChild(title);
+
+    const rulesTextStyle = new TextStyle({
+      fontFamily: 'Arial',
+      fontSize: 20,
+      fill: '#555555',
+      align: 'center',
+      wordWrap: true,
+      wordWrapWidth: 400,
+      lineHeight: 30,
+    });
+
+    const rulesContent =
+      '1. The balloon rises automatically.\n' +
+      '2. Higher altitude means higher risk.\n' +
+      '3. Press "LAND NOW" to land safely and bank your score.\n' +
+      '4. Don\'t wait too long or the balloon will pop!';
+
+    const rulesText = new Text({ text: rulesContent, style: rulesTextStyle });
+    rulesText.anchor.set(0.5);
+    rulesText.y = -20;
+    this.rulesPanel.addChild(rulesText);
+
+    const closeButton = new Container();
+    const closeBg = new Graphics();
+    closeBg.roundRect(-60, -25, 120, 50, 10);
+    closeBg.fill(0x2196f3);
+
+    const closeText = new Text({
+      text: 'GOT IT',
+      style: {
+        fontFamily: 'Arial',
+        fontSize: 20,
+        fontWeight: 'bold',
+        fill: '#ffffff',
+      },
+    });
+    closeText.anchor.set(0.5);
+
+    closeButton.addChild(closeBg, closeText);
+    closeButton.y = 140;
+    closeButton.eventMode = 'static';
+    closeButton.cursor = 'pointer';
+    closeButton.on('pointerdown', () => this.hideRulesModal());
+
+    this.rulesPanel.addChild(closeButton);
+  }
+
+  showRulesModal() {
+    this.rulesContainer.visible = true;
+    this.startMenuContainer.visible = false;
+    this.resize(this.game.app.screen.width, this.game.app.screen.height);
+  }
+
+  hideRulesModal() {
+    this.rulesContainer.visible = false;
+    this.startMenuContainer.visible = true;
     this.resize(this.game.app.screen.width, this.game.app.screen.height);
   }
 }
