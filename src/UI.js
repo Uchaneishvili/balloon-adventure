@@ -128,6 +128,25 @@ export class UI extends Container {
     }
   }
 
+  addHoverEffect(button) {
+    button.on('pointerover', () => {
+      button.children.forEach((child) => {
+        console.log(child.tint);
+        if (child.tint !== undefined) {
+          child.tint = 0xcccccc;
+        }
+      });
+    });
+    button.on('pointerout', () => {
+      button.children.forEach((child) => {
+        if (child.tint !== undefined) {
+          child.tint = 0xffffff;
+        }
+      });
+    });
+
+  }
+
   createLandButton() {
     this.landButton = new Container();
 
@@ -156,6 +175,7 @@ export class UI extends Container {
     this.landButton.on('pointerdown', () => {
       this.game.landBalloon();
     });
+    this.addHoverEffect(this.landButton);
     this.hudContainer.addChild(this.landButton);
   }
 
@@ -186,6 +206,8 @@ export class UI extends Container {
       this.soundOn.visible = !isMuted;
       this.soundOff.visible = isMuted;
     });
+
+    this.addHoverEffect(this.muteButton);
 
     this.addChild(this.muteButton);
   }
@@ -236,6 +258,7 @@ export class UI extends Container {
     this.infoButton.on('pointerdown', () => {
       this.showRulesModal();
     });
+    this.addHoverEffect(this.infoButton);
 
     this.startMenuContainer.addChild(this.infoButton);
 
@@ -262,6 +285,7 @@ export class UI extends Container {
     this.playButton.on('pointerdown', () => {
       this.game.startGame();
     });
+    this.addHoverEffect(this.playButton);
 
     this.startMenuContainer.addChild(this.playButton);
   }
@@ -374,6 +398,7 @@ export class UI extends Container {
       this.landButton.visible = true;
       this.hudContainer.visible = true;
     });
+    this.addHoverEffect(this.replayButton);
 
     this.messageContainer.addChild(this.replayButton);
 
@@ -449,6 +474,7 @@ export class UI extends Container {
     closeButton.eventMode = 'static';
     closeButton.cursor = 'pointer';
     closeButton.on('pointerdown', () => this.hideRulesModal());
+    this.addHoverEffect(closeButton);
 
     this.rulesPanel.addChild(closeButton);
   }
