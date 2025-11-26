@@ -13,8 +13,7 @@ export class UI extends Container {
       fontSize: 36,
       fontWeight: 'bold',
       fill: '#ffffff',
-      stroke: '#000000',
-      strokeThickness: 4,
+      stroke: { color: '#000000', width: 4 },
     });
 
     this.hudContainer = new Container();
@@ -224,8 +223,7 @@ export class UI extends Container {
       fontSize: 60,
       fontWeight: 'bold',
       fill: '#FFFFFF',
-      stroke: '#000000',
-      strokeThickness: 6,
+      stroke: { color: '#000000', width: 6 },
       dropShadow: true,
       dropShadowColor: '#000000',
       dropShadowBlur: 4,
@@ -347,8 +345,7 @@ export class UI extends Container {
       fontSize: 60,
       fontWeight: 'bold',
       fill: success ? '#4CAF50' : '#FF5733',
-      stroke: '#ffffff',
-      strokeThickness: 6,
+      stroke: { color: '#ffffff', width: 6 },
     });
 
     this.messageTitle = new Text({
