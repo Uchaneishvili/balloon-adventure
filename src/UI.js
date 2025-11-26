@@ -170,10 +170,10 @@ export class UI extends Container {
     this.soundOn = Sprite.from('assets/ui/sound_on.svg');
     this.soundOff = Sprite.from('assets/ui/sound_off.svg');
 
-    this.soundOn.width = 50;
-    this.soundOn.height = 50;
-    this.soundOff.width = 50;
-    this.soundOff.height = 50;
+    this.soundOn.width = 75;
+    this.soundOn.height = 75;
+    this.soundOff.width = 75;
+    this.soundOff.height = 75;
 
     this.soundOn.anchor.set(0.5);
     this.soundOff.anchor.set(0.5);
@@ -224,20 +224,18 @@ export class UI extends Container {
     this.startMenuContainer.addChild(this.startTitle);
 
     this.infoButton = new Container();
+
     const infoBg = new Graphics();
-    infoBg.circle(0, 0, 30);
+    infoBg.roundRect(-30, -30, 60, 60, 15);
     infoBg.fill(0x2196f3);
-    const infoText = new Text({
-      text: 'i',
-      style: {
-        fontFamily: 'Arial',
-        fontSize: 36,
-        fill: '#ffffff',
-        fontWeight: 'bold',
-      },
-    });
-    infoText.anchor.set(0.5);
-    this.infoButton.addChild(infoBg, infoText);
+    infoBg.stroke({ width: 2, color: 0xffffff });
+
+    const infoSprite = Sprite.from('assets/ui/info.svg');
+    infoSprite.width = 50;
+    infoSprite.height = 50;
+    infoSprite.anchor.set(0.5);
+    infoSprite.tint = 0xffffff;
+    this.infoButton.addChild(infoBg, infoSprite);
     this.infoButton.eventMode = 'static';
     this.infoButton.cursor = 'pointer';
     this.infoButton.on('pointerdown', () => {
@@ -250,6 +248,8 @@ export class UI extends Container {
     const playBg = new Graphics();
     playBg.roundRect(-80, -30, 160, 60, 15);
     playBg.fill(0x4caf50);
+    playBg.stroke({ width: 2, color: 0xffffff });
+
     const playText = new Text({
       text: 'PLAY',
       style: {

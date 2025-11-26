@@ -50,6 +50,7 @@ export class Game {
     await Assets.load([
       'assets/ui/sound_on.svg',
       'assets/ui/sound_off.svg',
+      'assets/ui/info.svg',
       'assets/sounds/pop.mp3',
       'assets/sounds/win.mp3',
       'assets/sounds/wind.mp3',
