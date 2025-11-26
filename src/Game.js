@@ -166,7 +166,7 @@ export class Game {
     const delta = ticker.deltaTime;
 
     this.altitude += this.speed * delta;
-    this.score = Math.floor(this.altitude / 10);
+    this.score = Math.floor(this.altitude / 50);
 
     this.balloon.rotation = Math.sin(Date.now() / 500) * 0.05;
 

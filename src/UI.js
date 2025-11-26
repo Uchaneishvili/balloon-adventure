@@ -21,20 +21,15 @@ export class UI extends Container {
     this.hudContainer.visible = false;
     this.addChild(this.hudContainer);
 
-    this.scoreText = new Text({ text: 'Altitude: 0m', style });
+    this.altitudeText = new Text({ text: 'Altitude: 0m', style });
+    this.altitudeText.x = 20;
+    this.altitudeText.y = 20;
+    this.hudContainer.addChild(this.altitudeText);
+
+    this.scoreText = new Text({ text: 'Score: 0', style });
     this.scoreText.x = 20;
-    this.scoreText.y = 20;
+    this.scoreText.y = 60;
     this.hudContainer.addChild(this.scoreText);
-
-    this.velocityText = new Text({ text: 'Velocity: 0 m/s', style });
-    this.velocityText.x = 20;
-    this.velocityText.y = 60;
-    this.hudContainer.addChild(this.velocityText);
-
-    this.riskText = new Text({ text: 'Risk: 0%', style });
-    this.riskText.x = 20;
-    this.riskText.y = 100;
-    this.hudContainer.addChild(this.riskText);
 
     this.createLandButton();
     this.createMuteButton();
@@ -297,9 +292,8 @@ export class UI extends Container {
   }
 
   update() {
-    this.scoreText.text = `Altitude: ${Math.floor(this.game.altitude)}m`;
-    this.velocityText.text = `Velocity: ${this.game.speed.toFixed(1)} m/s`;
-    this.riskText.text = `Risk: ${(this.game.riskLevel * 100).toFixed(0)}%`;
+    this.altitudeText.text = `Altitude: ${Math.floor(this.game.altitude)}m`;
+    this.scoreText.text = `Score: ${Math.floor(this.game.score)}`;
 
     if (this.game.isGameOver && !this.messageContainer.visible) {
       if (!this.game.balloon.visible) {
