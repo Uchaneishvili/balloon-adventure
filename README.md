@@ -63,7 +63,3 @@ Built with **PixiJS**, this project demonstrates efficient rendering and game lo
 
 4.  **Open in Browser:**
     Navigate to `http://localhost:3000` (or the port shown in the terminal).
-
-## 📝 License
-
-This project is open source and available under the [MIT License](LICENSE).
